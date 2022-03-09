@@ -1,0 +1,24 @@
+ul.puzzle {
+    display: flex;
+    max-width: 520px;
+    flex-wrap: wrap;
+    background-color: black;
+    padding: 1rem;
+    border-radius: 7px;
+}
+
+ul.puzzle li.tile {
+    list-style: none;
+    text-align: center;
+    padding: 30px 10px;
+    width: 130px;
+    border: 10px outset #ccc;
+    background-color: #fff;
+    font-size: 3.5rem;
+    font-weight: bold;
+}
+
+figcaption {
+    font-size: 32px;
+    font-style: italic;
+}
