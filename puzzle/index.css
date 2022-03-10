@@ -1,0 +1,37 @@
+ul.puzzle {
+    display: flex;
+    max-width: 520px;
+    flex-wrap: wrap;
+    background-color: black;
+    padding: 1rem;
+    border-radius: 7px;
+}
+
+ul.puzzle li.tile {
+    list-style: none;
+    text-align: center;
+    padding: 30px 10px;
+    width: 130px;
+    border: 10px outset #ccc;
+    background-color: #fff;
+    font-size: 3.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+ul.puzzle li.blank-tile {
+    list-style: none;
+    text-align: center;
+    padding: 30px 10px;
+    width: 130px;
+    font-size: 3.5rem;
+    border: 10px outset #000;
+    background-color: #000;
+    font-weight: bold;
+    visibility: hidden;
+}
+
+figcaption {
+    font-size: 32px;
+    font-style: italic;
+}
