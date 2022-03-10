@@ -1,41 +1,26 @@
 class Puzzle {
   constructor(numberOfTiles = 8) {
-    const availableSpaces = numberOfTiles + 1;
-    const rootOfAvailableSpaces = Math.sqrt(availableSpaces);
+    const allTilesPlusBlank = numberOfTiles + 1;
+    const numberOfTilesPerRow = Math.sqrt(allTilesPlusBlank); // number of tiles per row
     this.initialArrangement = [];
-    for (let i = 1; i <= availableSpaces; i += 1) {
+    for (let i = 1; i <= allTilesPlusBlank; i += 1) {
       this.initialArrangement.push(i);
     }
     this.currentArrangement = [...this.initialArrangement];
-    const blankTileID = availableSpaces;
-    this.blankTilePosition = blankTileID - 1; // initially the last item
-    this.validPositions = new Map();
+    const blankTileID = allTilesPlusBlank;
+    let blankTilePosition = blankTileID - 1; // initially the last item
 
-    this.renderTiles = () => {
-      const allTiles = this.currentArrangement.reduce(
-        (tiles, currentTile, index) => {
-          tiles += `<li 
-                  id="${currentTile}"
-                  class="${currentTile === blankTileID ? 'blank-tile' : 'tile'}"
-                  data-position="${index}"
-                  >${currentTile}</li>`;
-          return tiles;
-        },
-        ''
-      );
-      document.querySelector('.puzzle').innerHTML = allTiles;
-      const tiles = document.getElementsByClassName('tile');
-      Array.from(tiles).forEach((node) => {
-        node.addEventListener('click', this.handleTileClick);
-      });
-    };
-
+    /**
+     * @description swaps the tile at the tilePosition with the blank tile.
+     *
+     * @param {number} tilePosition
+     */
     const swapTiles = (tilePosition) => {
       const temp = this.currentArrangement[tilePosition];
       this.currentArrangement[tilePosition] =
-        this.currentArrangement[this.blankTilePosition];
-      this.currentArrangement[this.blankTilePosition] = temp;
-      this.blankTilePosition = tilePosition;
+        this.currentArrangement[blankTilePosition];
+      this.currentArrangement[blankTilePosition] = temp;
+      blankTilePosition = tilePosition;
     };
 
     const moveTile = (currentTilePosition) => {
@@ -45,7 +30,7 @@ class Puzzle {
        * @returns {boolean}
        */
       const isTileAtLeftEdge = () =>
-        currentTilePosition % rootOfAvailableSpaces === 0;
+        currentTilePosition % numberOfTilesPerRow === 0;
 
       /**
        * @description This checks whether the tile is at the right edge.
@@ -53,15 +38,14 @@ class Puzzle {
        * @returns {boolean}
        */
       const isTileAtRightEdge = () =>
-        (currentTilePosition + 1) % rootOfAvailableSpaces === 0;
+        (currentTilePosition + 1) % numberOfTilesPerRow === 0;
 
-      const blankOnTheLeft = currentTilePosition - 1 === this.blankTilePosition;
-      const blankOnTheRight =
-        currentTilePosition + 1 === this.blankTilePosition;
+      const blankOnTheLeft = currentTilePosition - 1 === blankTilePosition;
+      const blankOnTheRight = currentTilePosition + 1 === blankTilePosition;
       const blankAtTheTop =
-        currentTilePosition - rootOfAvailableSpaces === this.blankTilePosition;
+        currentTilePosition - numberOfTilesPerRow === blankTilePosition;
       const blankAtTheBottom =
-        currentTilePosition + rootOfAvailableSpaces === this.blankTilePosition;
+        currentTilePosition + numberOfTilesPerRow === blankTilePosition;
 
       if (
         (!isTileAtLeftEdge() && blankOnTheLeft) || // is blank on the left of the current tile which is not at the edge
@@ -74,19 +58,63 @@ class Puzzle {
       return '';
     };
 
-    this.handleTileClick = (event) => {
-      const tilePosition = parseInt(
-        event.target.getAttribute('data-position'),
-        10
+    const renderTiles = () => {
+      const allTiles = this.currentArrangement.reduce(
+        (tiles, currentTile, index) => {
+          tiles += `<li 
+                    id="${currentTile}"
+                    class="${
+                      currentTile === blankTileID ? 'blank-tile' : 'tile'
+                    }"
+                    data-position="${index}"
+                    >${currentTile}</li>`;
+          return tiles;
+        },
+        ''
       );
-      moveTile(tilePosition);
-      this.renderTiles();
+      document.querySelector('.puzzle').innerHTML = allTiles;
+      const tiles = document.getElementsByClassName('tile');
+
+      // add the event listener
+      Array.from(tiles).forEach((node) => {
+        node.addEventListener('click', (event) => {
+          const tilePosition = parseInt(
+            event.target.getAttribute('data-position'),
+            10
+          );
+          moveTile(tilePosition);
+          renderTiles();
+        });
+      });
+    };
+
+    /**
+     * @description shuffles the tiles
+     */
+    this.disOrderTiles = () => {
+      this.currentArrangement.forEach((item, currentIndex) => {
+        // Pick a remaining element...
+        const randomIndex = Math.floor(Math.random() * currentIndex);
+
+        // And swap it with the current element.
+        [
+          this.currentArrangement[currentIndex],
+          this.currentArrangement[randomIndex],
+        ] = [
+          this.currentArrangement[randomIndex],
+          this.currentArrangement[currentIndex],
+        ];
+      });
+      renderTiles();
+    };
+
+    /**
+     * @description initialize the tiles
+     */
+    this.init = () => {
+      renderTiles();
     };
   }
-
-  init = () => {
-    this.renderTiles();
-  };
 }
 
 const puzzle = new Puzzle(8);
