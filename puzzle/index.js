@@ -72,7 +72,12 @@ class Puzzle {
         },
         ''
       );
-      document.querySelector('.puzzle').innerHTML = allTiles;
+      const puzzle = document.querySelector('.puzzle');
+      puzzle.innerHTML = allTiles;
+      // set the puzzle's max width
+      const maxWidth = 520 + (170 * (numberOfTilesPerRow - 3));
+      puzzle.style.maxWidth = `${maxWidth}px`
+      puzzle.style.minWidth = `${maxWidth}px`
       const tiles = document.getElementsByClassName('tile');
 
       // add the event listener

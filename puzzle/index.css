@@ -16,6 +16,7 @@ ul.puzzle li.tile {
     background-color: #fff;
     font-size: 3.5rem;
     font-weight: bold;
+    cursor: pointer;
 }
 
 ul.puzzle li.blank-tile {
@@ -27,6 +28,7 @@ ul.puzzle li.blank-tile {
     border: 10px outset #000;
     background-color: #000;
     font-weight: bold;
+    visibility: hidden;
 }
 
 figcaption {
