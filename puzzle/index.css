@@ -18,6 +18,17 @@ ul.puzzle li.tile {
     font-weight: bold;
 }
 
+ul.puzzle li.blank-tile {
+    list-style: none;
+    text-align: center;
+    padding: 30px 10px;
+    width: 130px;
+    font-size: 3.5rem;
+    border: 10px outset #000;
+    background-color: #000;
+    font-weight: bold;
+}
+
 figcaption {
     font-size: 32px;
     font-style: italic;
